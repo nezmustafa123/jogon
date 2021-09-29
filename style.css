@@ -7,7 +7,7 @@
   --color-dark--1: #f0f0f0;
   --color-dark--2: #42484d;
   --color-light--1: #aaa;
-  --color-light--2: #ececec;
+  --color-light--2: #000000;
   --color-light--3: rgb(214, 222, 224);
 }
 
@@ -50,11 +50,19 @@ a:visited {
   display: flex;
   flex-direction: column;
 }
+.heading {
+  font-size: 1.5em;
+  display: inline;
+}
 
 .logo {
   height: 8.3rem;
   align-self: center;
   margin-bottom: 4rem;
+}
+
+.sidebar__title {
+  width: 100%;
 }
 
 .workouts {
