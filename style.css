@@ -61,10 +61,20 @@ a:visited {
   margin-bottom: 4rem;
 }
 
-.sidebar__title {
-  width: 100%;
+.sidebar__title img {
+  width: 120px;
+  height: 120px;
+  float: left;
+  top: -25px;
+  left: 65px;
+  position: relative;
 }
-
+.sidebar__title h1 {
+  position: relative;
+  top: 8px;
+  left: 30px;
+  font-size: 3.5em;
+}
 .workouts {
   list-style: none;
   height: 77vh;
