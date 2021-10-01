@@ -15,9 +15,12 @@ const inputElevation = document.querySelector('.form__input--elevation');
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     function (position) {
-      //position argument is object
+      //position object
       //position argument
-      const latitude = position.cords;
+      const { latitude } = position.coords;
+      //destructure latitude property
+      const { longitude } = position.coords;
+      //destructure longitude
     },
     function () {
       alert('Could not get your position');
