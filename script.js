@@ -25,8 +25,9 @@ if (navigator.geolocation) {
       console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
 
       const coords = [latitude, longitude];
-
+      //add event handler to map to listen for clicks use event handler coming from library
       const map = L.map('map').setView(coords, 14);
+      console.log(map);
       //l variable global variable that's available in other scripts only works if scrpts file comes after
       L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         attribution:
@@ -37,9 +38,16 @@ if (navigator.geolocation) {
         .addTo(map)
         .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
         .openPopup();
+      //map object generated leaflet with on method
+      map.on('click', function (mapEvent) {
+        //takes in special 'map' event
+        console.log(mapEvent);
+      });
     },
     function () {
       alert('Could not get your position');
     }
   );
 }
+
+//render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
