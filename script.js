@@ -36,23 +36,24 @@ if (navigator.geolocation) {
 
       //map object generated leaflet with on method
       map.on('click', function (mapEvent) {
-        //takes in special 'map' event from leaflet library
-        console.log(mapEvent);
-        const { lat, lng } = mapEvent.latlng; //descructure from latlng property which is object
-        L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup(
-            L.popup({
-              maxWidth: 250,
-              minWidth: 100,
-              // maxHeight: 250,
-              autolose: false,
-              closeOnClick: false,
-              className: 'running-popup',
-            })
-          )
-          .setPopupContent('Workout')
-          .openPopup();
+        form.classList.remove('hidden');
+        // //takes in special 'map' event from leaflet library
+        // console.log(mapEvent);
+        // const { lat, lng } = mapEvent.latlng; //descructure from latlng property which is object
+        // L.marker([lat, lng])
+        //   .addTo(map)
+        //   .bindPopup(
+        //     L.popup({
+        //       maxWidth: 250,
+        //       minWidth: 100,
+        //       // maxHeight: 250,
+        //       autoClose: false,
+        //       closeOnClick: false,
+        //       className: 'running-popup',
+        //     })
+        //   )
+        //   .setPopupContent('Workout')
+        //   .openPopup();
       });
     },
     function () {

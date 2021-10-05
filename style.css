@@ -4,11 +4,11 @@
 
   /* --color-dark--1: #2d3439; */
 
-  --color-dark--1: #f0f0f0;
+  --color-dark--1: #000000;
   --color-dark--2: #42484d;
-  --color-light--1: #aaa;
-  --color-light--2: #000000;
-  --color-light--3: rgb(214, 222, 224);
+  --color-light--1: rgb(255, 255, 255);
+  --color-light--2: #ffffff;
+  --color-light--3: rgb(255, 255, 255);
 }
 
 * {
