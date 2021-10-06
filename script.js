@@ -10,7 +10,7 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
-
+let map, mapEvent; //declare global variable for map
 //geolocation browser api on navigator takes two callbacks success and position
 if (navigator.geolocation) {
   //if geolocation exists and browser has permission do this
@@ -26,7 +26,7 @@ if (navigator.geolocation) {
 
       const coords = [latitude, longitude];
       //add event handler to map to listen for clicks use event handler coming from library
-      const map = L.map('map').setView(coords, 14);
+      map = L.map('map').setView(coords, 14); //reassign map
       console.log(map);
       //l variable global variable that's available in other scripts only works if scrpts file comes after
       L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -35,25 +35,11 @@ if (navigator.geolocation) {
       }).addTo(map);
 
       //map object generated leaflet with on method
-      map.on('click', function (mapEvent) {
+      //handing clicks on map
+      map.on('click', function (mapE) {
+        mapEvent = mapE; //get coordinates from mapE copy it to global variable then access it later
         form.classList.remove('hidden');
-        // //takes in special 'map' event from leaflet library
-        // console.log(mapEvent);
-        // const { lat, lng } = mapEvent.latlng; //descructure from latlng property which is object
-        // L.marker([lat, lng])
-        //   .addTo(map)
-        //   .bindPopup(
-        //     L.popup({
-        //       maxWidth: 250,
-        //       minWidth: 100,
-        //       // maxHeight: 250,
-        //       autoClose: false,
-        //       closeOnClick: false,
-        //       className: 'running-popup',
-        //     })
-        //   )
-        //   .setPopupContent('Workout')
-        //   .openPopup();
+        inputDistance.focus();
       });
     },
     function () {
@@ -63,3 +49,23 @@ if (navigator.geolocation) {
 }
 
 //render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
+form.addEventListener('submit', function () {
+  //display the marker
+
+  console.log(mapEvent);
+  const { lat, lng } = mapEvent.latlng; //descructure from latlng property which is object
+  L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(
+      L.popup({
+        maxWidth: 250,
+        minWidth: 100,
+        // maxHeight: 250,
+        autoClose: false,
+        closeOnClick: false,
+        className: 'running-popup',
+      })
+    )
+    .setPopupContent('Workout')
+    .openPopup();
+});
