@@ -49,9 +49,16 @@ if (navigator.geolocation) {
 }
 
 //render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
-form.addEventListener('submit', function () {
-  //display the marker
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  //clear input fields
 
+  inputDistance.value =
+    inputDuration.value =
+    inputCadence.value =
+    inputElevation.value =
+      '';
+  //displaymarker
   console.log(mapEvent);
   const { lat, lng } = mapEvent.latlng; //descructure from latlng property which is object
   L.marker([lat, lng])
@@ -68,4 +75,10 @@ form.addEventListener('submit', function () {
     )
     .setPopupContent('Workout')
     .openPopup();
+});
+//change event listener available on select element
+inputType.addEventListener('change', function () {
+  inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+  inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+  //toggle class on both of them
 });
