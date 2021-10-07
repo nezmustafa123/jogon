@@ -82,3 +82,6 @@ inputType.addEventListener('change', function () {
   inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
   //toggle class on both of them
 });
+//architecture give project a structure when and how to store the data
+//data needing to be stored comes from user input
+//design classes by having parent class that has distance duration coords properties common to child classes
