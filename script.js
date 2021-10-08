@@ -22,6 +22,8 @@ class App {
   constructor() {
     //load page event triggers constructor triggers getposition
     this._getPosition();
+    //render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
+    form.addEventListener('submit', this._newWorkout.bind(this));
   }
 
   _getPosition() {
@@ -60,52 +62,50 @@ class App {
 
     //map object generated leaflet with on method
     //handing clicks on map
-    this.#map.on('click', function (mapE) {
-      this.#mapEvent = mapE; //get coordinates from mapE copy it to global variable then access it later
-      form.classList.remove('hidden');
-      inputDistance.focus();
-    });
+    this.#map.on('click', this._showForm.bind(this)); //bind this keyword so this in function is app object, otherwise set map event on map
   }
 
   _toggleElevationField() {}
 
-  _showForm() {}
+  _showForm(mapE) {
+    this.#mapEvent = mapE; //get coordinates from mapE copy it to global variable then access it later
+    form.classList.remove('hidden');
+    inputDistance.focus();
+  }
 
   _togglElevationField() {}
 
-  _newWorkout() {}
+  _newWorkout(e) {
+    e.preventDefault();
+    //clear input fields
+
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+        '';
+    //displaymarker
+
+    const { lat, lng } = this.#mapEvent.latlng; //descructure from latlng property which is object
+    L.marker([lat, lng])
+      .addTo(this.#map)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          // maxHeight: 250,
+          autoClose: false,
+          closeOnClick: false,
+          className: 'running-popup',
+        })
+      )
+      .setPopupContent('Workout')
+      .openPopup();
+  }
 }
 
 const app = new App(); //no parameters needed
 
-//render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
-  //clear input fields
-
-  inputDistance.value =
-    inputDuration.value =
-    inputCadence.value =
-    inputElevation.value =
-      '';
-  //displaymarker
-  console.log(mapEvent);
-  const { lat, lng } = mapEvent.latlng; //descructure from latlng property which is object
-  L.marker([lat, lng])
-    .addTo(map)
-    .bindPopup(
-      L.popup({
-        maxWidth: 250,
-        minWidth: 100,
-        // maxHeight: 250,
-        autoClose: false,
-        closeOnClick: false,
-        className: 'running-popup',
-      })
-    )
-    .setPopupContent('Workout')
-    .openPopup();
-});
 //change event listener available on select element
 inputType.addEventListener('change', function () {
   inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
