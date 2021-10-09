@@ -12,6 +12,32 @@ const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 let map, mapEvent; //declare global variable for map
 
+class Workout {
+  //take in data common to both workouts
+
+  date = newDate(); //create new date in which workout happened
+  id = (new Date() + '').slice(-10);
+  constructor(distance, coords, duration) {
+    this.coords = coords;
+    this.distance = distance; //km
+    this.duration = duration; //min
+  }
+}
+//child classes
+class Running extends Workout {
+  constructor(coords, distance, duration, cadence) {
+    //add original parameters and unique parameter call super with common ones
+    super(coords, distance, duration);
+    this.cadence = cadence;
+  }
+}
+class Cycling extends Workout {
+  constructor(coords, distance, duration, elevationGain) {
+    super(coords, distance, duration);
+    this.elevationGain = elevationGain;
+  }
+}
+
 //one big class APP everything relating to application should be in the class
 class App {
   //private instance properties
@@ -24,6 +50,11 @@ class App {
     this._getPosition();
     //render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
     form.addEventListener('submit', this._newWorkout.bind(this));
+    //change event listener available on select element
+    inputType.addEventListener('change', this._toggleElevationField());
+    //architecture give project a structure when and how to store the data
+    //data needing to be stored comes from user input
+    //design classes by having parent class that has distance duration coords properties common to child classes
   }
 
   _getPosition() {
@@ -65,15 +96,17 @@ class App {
     this.#map.on('click', this._showForm.bind(this)); //bind this keyword so this in function is app object, otherwise set map event on map
   }
 
-  _toggleElevationField() {}
-
   _showForm(mapE) {
     this.#mapEvent = mapE; //get coordinates from mapE copy it to global variable then access it later
     form.classList.remove('hidden');
     inputDistance.focus();
   }
 
-  _togglElevationField() {}
+  _togglElevationField() {
+    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+    //toggle class on both of them
+  }
 
   _newWorkout(e) {
     e.preventDefault();
@@ -105,13 +138,3 @@ class App {
 }
 
 const app = new App(); //no parameters needed
-
-//change event listener available on select element
-inputType.addEventListener('change', function () {
-  inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
-  inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-  //toggle class on both of them
-});
-//architecture give project a structure when and how to store the data
-//data needing to be stored comes from user input
-//design classes by having parent class that has distance duration coords properties common to child classes
