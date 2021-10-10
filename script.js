@@ -14,11 +14,12 @@ let map, mapEvent; //declare global variable for map
 
 class Workout {
   //take in data common to both workouts
-
-  date = newDate(); //create new date in which workout happened
-  id = (new Date() + '').slice(-10);
+  //instance properties
+  date = new Date(); //create new date in which workout happened
+  id = (Date.now() + '').slice(-10);
   constructor(distance, coords, duration) {
-    this.coords = coords;
+    //can call any code in constructor
+    this.coords = coords; //[lat, lng] takes in array of lat and lng
     this.distance = distance; //km
     this.duration = duration; //min
   }
@@ -29,15 +30,35 @@ class Running extends Workout {
     //add original parameters and unique parameter call super with common ones
     super(coords, distance, duration);
     this.cadence = cadence;
+    this.calcPace();
+  }
+
+  //calculate pace
+  calcPace() {
+    //min/km
+    this.pace = this.duration / this.distance;
+    return this.pace;
   }
 }
 class Cycling extends Workout {
   constructor(coords, distance, duration, elevationGain) {
     super(coords, distance, duration);
     this.elevationGain = elevationGain;
+    this.calcSpeed();
+  }
+
+  calcSpeed() {
+    // km/h
+    this.speed = this.distance / (this.duration / 60); //divide by 60 to get hours not minutes
+    return this.speed;
   }
 }
-
+//create new classes as test
+const run1 = new Running([23, -23], 5.2, 45, 190);
+const cycle1 = new Cycling([23, -23], 27, 96, 525);
+console.log(run1, cycle1);
+///////////////////////////////
+//APPLICATIION ARCHITECTURE
 //one big class APP everything relating to application should be in the class
 class App {
   //private instance properties
@@ -97,12 +118,12 @@ class App {
   }
 
   _showForm(mapE) {
-    this.#mapEvent = mapE; //get coordinates from mapE copy it to global variable then access it later
+    this.#mapEvent = mapE; //get coordinates from mapE when map is clicked copy it to global variable then access it later
     form.classList.remove('hidden');
     inputDistance.focus();
   }
 
-  _togglElevationField() {
+  _toggleElevationField() {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
     //toggle class on both of them
