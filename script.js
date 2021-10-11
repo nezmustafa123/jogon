@@ -131,6 +131,13 @@ class App {
 
   _newWorkout(e) {
     e.preventDefault();
+
+    //get data from form
+    //check if data is valie
+    //if workout is of type running create running object
+    //if workout is of type cycling create cycling ojbect
+    //add new object to workout array
+    //render workout on map
     //clear input fields
 
     inputDistance.value =
