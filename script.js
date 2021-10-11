@@ -3,13 +3,6 @@
 // prettier-ignore
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-const form = document.querySelector('.form');
-const containerWorkouts = document.querySelector('.workouts');
-const inputType = document.querySelector('.form__input--type');
-const inputDistance = document.querySelector('.form__input--distance');
-const inputDuration = document.querySelector('.form__input--duration');
-const inputCadence = document.querySelector('.form__input--cadence');
-const inputElevation = document.querySelector('.form__input--elevation');
 let map, mapEvent; //declare global variable for map
 
 class Workout {
@@ -58,6 +51,14 @@ const run1 = new Running([23, -23], 5.2, 45, 190);
 const cycle1 = new Cycling([23, -23], 27, 96, 525);
 console.log(run1, cycle1);
 ///////////////////////////////
+const form = document.querySelector('.form');
+const containerWorkouts = document.querySelector('.workouts');
+const inputType = document.querySelector('.form__input--type');
+const inputDistance = document.querySelector('.form__input--distance');
+const inputDuration = document.querySelector('.form__input--duration');
+const inputCadence = document.querySelector('.form__input--cadence');
+const inputElevation = document.querySelector('.form__input--elevation');
+
 //APPLICATIION ARCHITECTURE
 //one big class APP everything relating to application should be in the class
 class App {
@@ -133,19 +134,12 @@ class App {
     e.preventDefault();
 
     //get data from form
+
     //check if data is valie
     //if workout is of type running create running object
     //if workout is of type cycling create cycling ojbect
     //add new object to workout array
-    //render workout on map
-    //clear input fields
-
-    inputDistance.value =
-      inputDuration.value =
-      inputCadence.value =
-      inputElevation.value =
-        '';
-    //displaymarker
+    //render workout on map as a marker
 
     const { lat, lng } = this.#mapEvent.latlng; //descructure from latlng property which is object
     L.marker([lat, lng])
@@ -162,6 +156,15 @@ class App {
       )
       .setPopupContent('Workout')
       .openPopup();
+
+    //hide form and clear input fields
+
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+        '';
+    //displaymarker
   }
 }
 
