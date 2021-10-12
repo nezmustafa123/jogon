@@ -47,9 +47,9 @@ class Cycling extends Workout {
   }
 }
 //create new classes as test
-const run1 = new Running([23, -23], 5.2, 45, 190);
-const cycle1 = new Cycling([23, -23], 27, 96, 525);
-console.log(run1, cycle1);
+// const run1 = new Running([23, -23], 5.2, 45, 190);
+// const cycle1 = new Cycling([23, -23], 27, 96, 525);
+// console.log(run1, cycle1);
 ///////////////////////////////
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
@@ -73,7 +73,7 @@ class App {
     //render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
     form.addEventListener('submit', this._newWorkout.bind(this));
     //change event listener available on select element
-    inputType.addEventListener('change', this._toggleElevationField());
+    inputType.addEventListener('change', this._toggleElevationField);
     //architecture give project a structure when and how to store the data
     //data needing to be stored comes from user input
     //design classes by having parent class that has distance duration coords properties common to child classes
@@ -128,16 +128,37 @@ class App {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
     //toggle class on both of them
+    console.log('fired');
+    console.log(inputElevation.classList);
   }
 
   _newWorkout(e) {
+    //new workout method
     e.preventDefault();
 
     //get data from form
+    const type = inputType.value; //select element will return one of the options each option has string value
+    const distance = +inputDistance.value; //convert to number
+    const duration = +inputDuration.value; //convert to number
+    //check if data is valid
 
-    //check if data is valie
-    //if workout is of type running create running object
-    //if workout is of type cycling create cycling ojbect
+    //if workout is of type running create running object get cadence
+    if (type === 'running') {
+      const cadence = +inputCadence.value;
+      //check if data is valid (number)
+
+      if (
+        !Number.isFinite(distance) ||
+        !Number.isFinite(duration) ||
+        !Number.isFinite(cadence)
+      ) {
+        return alert('Inputs have to be positive numbers!');
+      }
+    }
+    //if workout is of type cycling create cycling ojbect get elevation gain
+    if (type === 'cycling') {
+      const elevation = +inputElevation.value;
+    }
     //add new object to workout array
     //render workout on map as a marker
 
@@ -164,7 +185,6 @@ class App {
       inputCadence.value =
       inputElevation.value =
         '';
-    //displaymarker
   }
 }
 
