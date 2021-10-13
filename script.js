@@ -100,7 +100,7 @@ class App {
     //destructure latitude property
     const { longitude } = position.coords;
     //destructure longitude
-    console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
+    // console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
 
     const coords = [latitude, longitude];
     // console.log(this);
@@ -133,6 +133,9 @@ class App {
   }
 
   _newWorkout(e) {
+    const validInputs = (...inputs) =>
+      inputs.every(inp => Number.isFinite(inp));
+    //arrow function use rest parameter loop through using every is one is not number will return false
     //new workout method
     e.preventDefault();
 
@@ -148,9 +151,13 @@ class App {
       //check if data is valid (number)
 
       if (
-        !Number.isFinite(distance) ||
-        !Number.isFinite(duration) ||
-        !Number.isFinite(cadence)
+        //check for opposide of what were interested in using guard clause
+        //use isfinite to cheeck if it's not a number when one of these three is not a number and not all
+        // !Number.isFinite(distance) ||
+        // !Number.isFinite(duration) ||
+        // !Number.isFinite(cadence)
+        //invert the function if not true then show the window
+        !validInputs(distance, duration, cadence)
       ) {
         return alert('Inputs have to be positive numbers!');
       }
