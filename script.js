@@ -137,6 +137,8 @@ class App {
       inputs.every(inp => Number.isFinite(inp));
     //arrow function use rest parameter loop through using every is one is not number will return false
     //new workout method
+    const allPositive = (...inputs) => inputs.every(inp => inp > 0);
+    //if every inputs
     e.preventDefault();
 
     //get data from form
@@ -156,8 +158,9 @@ class App {
         // !Number.isFinite(distance) ||
         // !Number.isFinite(duration) ||
         // !Number.isFinite(cadence)
-        //invert the function if not true then show the window
-        !validInputs(distance, duration, cadence)
+        // invert the function if not true then show the window
+        !validInputs(distance, duration, cadence) ||
+        !allPositive(distance, duration, cadence)
       ) {
         return alert('Inputs have to be positive numbers!');
       }
@@ -165,7 +168,13 @@ class App {
     //if workout is of type cycling create cycling ojbect get elevation gain
     if (type === 'cycling') {
       const elevation = +inputElevation.value;
+      if (
+        !validInputs(distance, duration, elevation) ||
+        !allPositive(distance, duration)
+      )
+        return alert('Inputs have to be positive numbers!');
     }
+
     //add new object to workout array
     //render workout on map as a marker
 
