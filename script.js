@@ -62,10 +62,12 @@ const inputElevation = document.querySelector('.form__input--elevation');
 //APPLICATIION ARCHITECTURE
 //one big class APP everything relating to application should be in the class
 class App {
-  //private instance properties
+  //private class fields
 
   #map;
   #mapEvent;
+  #workouts = []; //initialise field to empty array
+
   //implement app class and methods put functionality in methods which will be called constructor method gets called straight away
   constructor() {
     //load page event triggers constructor triggers getposition
@@ -137,7 +139,7 @@ class App {
       inputs.every(inp => Number.isFinite(inp));
     //arrow function use rest parameter loop through using every is one is not number will return false
     //new workout method
-    const allPositive = (...inputs) => inputs.every(inp => inp > 0);
+    const allPositive = (...inputs) => inputs.every(inp => inp > 0); //arbitraty inputs using rest operator
     //if every inputs
     e.preventDefault();
 
@@ -145,8 +147,9 @@ class App {
     const type = inputType.value; //select element will return one of the options each option has string value
     const distance = +inputDistance.value; //convert to number
     const duration = +inputDuration.value; //convert to number
+    const { lat, lng } = this.#mapEvent.latlng; //descructure from latlng property which is object
+    let workout;
     //check if data is valid
-
     //if workout is of type running create running object get cadence
     if (type === 'running') {
       const cadence = +inputCadence.value;
@@ -161,24 +164,28 @@ class App {
         // invert the function if not true then show the window
         !validInputs(distance, duration, cadence) ||
         !allPositive(distance, duration, cadence)
-      ) {
+      )
         return alert('Inputs have to be positive numbers!');
-      }
+
+      workout = new Running([lat, lng], distance, duration, cadence);
     }
-    //if workout is of type cycling create cycling ojbect get elevation gain
+    //if workout is of type cycling create cycling ojbect amd get elevation gain
     if (type === 'cycling') {
       const elevation = +inputElevation.value;
       if (
         !validInputs(distance, duration, elevation) ||
-        !allPositive(distance, duration)
+        !allPositive(distance, duration) //elevationgain may well be negative for cycling so leave it out
       )
         return alert('Inputs have to be positive numbers!');
+      workout = new Cycling([lat, lng], distance, duration, elevation); //make workout cycling object
     }
+
+    this.#workouts.push(workout); //push the new workout created with running constructor function/class
+    console.log(workout);
 
     //add new object to workout array
     //render workout on map as a marker
 
-    const { lat, lng } = this.#mapEvent.latlng; //descructure from latlng property which is object
     L.marker([lat, lng])
       .addTo(this.#map)
       .bindPopup(
