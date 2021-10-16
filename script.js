@@ -10,7 +10,7 @@ class Workout {
   //instance properties
   date = new Date(); //create new date in which workout happened
   id = (Date.now() + '').slice(-10);
-  constructor(distance, coords, duration) {
+  constructor(coords, distance, duration) {
     //can call any code in constructor
     this.coords = coords; //[lat, lng] takes in array of lat and lng
     this.distance = distance; //km
@@ -19,6 +19,7 @@ class Workout {
 }
 //child classes
 class Running extends Workout {
+  type = 'running';
   constructor(coords, distance, duration, cadence) {
     //add original parameters and unique parameter call super with common ones
     super(coords, distance, duration);
@@ -27,13 +28,15 @@ class Running extends Workout {
   }
 
   //calculate pace
+  //min/km
   calcPace() {
-    //min/km
     this.pace = this.duration / this.distance;
+    // console.log(pace);
     return this.pace;
   }
 }
 class Cycling extends Workout {
+  type = 'cycling';
   constructor(coords, distance, duration, elevationGain) {
     super(coords, distance, duration);
     this.elevationGain = elevationGain;
@@ -96,6 +99,7 @@ class App {
   }
 
   _loadMap(position) {
+    //on map load
     //position object
     //position argument not an event in the common sense gets passed in automatically load map called on the event
     const { latitude } = position.coords;
@@ -130,8 +134,6 @@ class App {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
     //toggle class on both of them
-    console.log('fired');
-    console.log(inputElevation.classList);
   }
 
   _newWorkout(e) {
@@ -154,7 +156,7 @@ class App {
     if (type === 'running') {
       const cadence = +inputCadence.value;
       //check if data is valid (number)
-
+      console.log(cadence);
       if (
         //check for opposide of what were interested in using guard clause
         //use isfinite to cheeck if it's not a number when one of these three is not a number and not all
@@ -177,6 +179,7 @@ class App {
         !allPositive(distance, duration) //elevationgain may well be negative for cycling so leave it out
       )
         return alert('Inputs have to be positive numbers!');
+
       workout = new Cycling([lat, lng], distance, duration, elevation); //make workout cycling object
     }
 
@@ -184,22 +187,13 @@ class App {
     console.log(workout);
 
     //add new object to workout array
+
     //render workout on map as a marker
 
-    L.marker([lat, lng])
-      .addTo(this.#map)
-      .bindPopup(
-        L.popup({
-          maxWidth: 250,
-          minWidth: 100,
-          // maxHeight: 250,
-          autoClose: false,
-          closeOnClick: false,
-          className: 'running-popup',
-        })
-      )
-      .setPopupContent('Workout')
-      .openPopup();
+    this.renderWorkoutMarker(workout);
+    //pass in workout object to render specific workout markers
+
+    //render workout on list
 
     //hide form and clear input fields
 
@@ -208,6 +202,23 @@ class App {
       inputCadence.value =
       inputElevation.value =
         '';
+  }
+
+  renderWorkoutMarker(workout) {
+    L.marker(workout.coords)
+      .addTo(this.#map)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          // maxHeight: 250,
+          autoClose: false,
+          closeOnClick: false,
+          className: `${workout.type}-popup`,
+        })
+      )
+      .setPopupContent('workout')
+      .openPopup();
   }
 }
 
