@@ -1,8 +1,5 @@
 'use strict';
 
-// prettier-ignore
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
 let map, mapEvent; //declare global variable for map
 
 class Workout {
@@ -16,6 +13,15 @@ class Workout {
     this.distance = distance; //km
     this.duration = duration; //min
   }
+  _setDescription() {
+    //set workout description based of type and date
+    //prettier-ignore
+    //convert type to uppercase
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
+      months[this.date.getMonth()]
+    } ${this.date.getDate()}`; //use number from get month to retrieve month string from array
+  } //get date from tehe workout object then month from that which is zero based array
 }
 //child classes
 class Running extends Workout {
@@ -182,6 +188,7 @@ class App {
 
       workout = new Cycling([lat, lng], distance, duration, elevation); //make workout cycling object
     }
+    //add new object to workout array
 
     this.#workouts.push(workout); //push the new workout created with running constructor function/class
     console.log(workout);
@@ -190,11 +197,11 @@ class App {
 
     //render workout on map as a marker
 
-    this.renderWorkoutMarker(workout);
+    this._renderWorkoutMarker(workout);
     //pass in workout object to render specific workout markers
 
     //render workout on list
-
+    this._renderWorkout(workout);
     //hide form and clear input fields
 
     inputDistance.value =
@@ -204,7 +211,7 @@ class App {
         '';
   }
 
-  renderWorkoutMarker(workout) {
+  _renderWorkoutMarker(workout) {
     L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
@@ -219,6 +226,31 @@ class App {
       )
       .setPopupContent('workout')
       .openPopup();
+  }
+  //use inside new workout method
+  _renderWorkout(workout) {
+    //insert some dynamic markup
+    const html = `<li class="workout workout--${workout.type}" data-id="${
+      workout.id
+    }">
+    <h2 class="workout__title">Running on April 14</h2>
+    <div class="workout__details">
+      <span class="workout__icon">${
+        workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
+      }</span>
+      <span class="workout__value">${workout.distance}</span>
+      <span class="workout__unit">km</span>
+    </div>
+    <div class="workout__details">
+      <span class="workout__icon">⏱</span>
+      <span class="workout__value">${workout.duration}</span>
+      <span class="workout__unit">min</span>
+    </div>
+    <div class="workout__details">
+      <span class="workout__icon">⚡️</span>
+      <span class="workout__value">4.6</span>
+      <span class="workout__unit">min/km</span>
+    </div>`;
   }
 }
 
