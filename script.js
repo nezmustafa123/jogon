@@ -4,7 +4,7 @@ let map, mapEvent; //declare global variable for map
 
 class Workout {
   //take in data common to both workouts
-  //instance properties
+  //instance properties available on the new objects created through child classes
   date = new Date(); //create new date in which workout happened
   id = (Date.now() + '').slice(-10);
   constructor(coords, distance, duration) {
@@ -14,6 +14,7 @@ class Workout {
     this.duration = duration; //min
   }
   _setDescription() {
+    //add set descti
     //set workout description based of type and date
     //prettier-ignore
     //convert type to uppercase
@@ -31,9 +32,10 @@ class Running extends Workout {
     super(coords, distance, duration);
     this.cadence = cadence;
     this.calcPace();
+    this._setDescription();
   }
 
-  //calculate pace
+  //calculate pace only unique to running
   //min/km
   calcPace() {
     this.pace = this.duration / this.distance;
@@ -47,8 +49,9 @@ class Cycling extends Workout {
     super(coords, distance, duration);
     this.elevationGain = elevationGain;
     this.calcSpeed();
+    this._setDescription(); //constructor gets access to all methods of the parent class it's executed here but gets accesss to tohe type
   }
-
+  //calculate speed only unique to cycling
   calcSpeed() {
     // km/h
     this.speed = this.distance / (this.duration / 60); //divide by 60 to get hours not minutes
@@ -233,7 +236,7 @@ class App {
     const html = `<li class="workout workout--${workout.type}" data-id="${
       workout.id
     }">
-    <h2 class="workout__title">Running on April 14</h2>
+    <h2 class="workout__title">${workout.description}</h2>
     <div class="workout__details">
       <span class="workout__icon">${
         workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
@@ -246,11 +249,36 @@ class App {
       <span class="workout__value">${workout.duration}</span>
       <span class="workout__unit">min</span>
     </div>
+    `;
+
+    if (workout.type === 'running') {
+      html += `
     <div class="workout__details">
-      <span class="workout__icon">⚡️</span>
-      <span class="workout__value">4.6</span>
-      <span class="workout__unit">min/km</span>
-    </div>`;
+          <span class="workout__icon">⚡️</span>
+          <span class="workout__value">${workout.pace.toFixed(1)}</span>
+          <span class="workout__unit">min/km</span>
+        </div>
+        <div class="workout__details">
+          <span class="workout__icon">🦶🏼</span>
+          <span class="workout__value">${workout.cadence}</span>
+          <span class="workout__unit">spm</span>
+      </div>
+     </li>
+     `;
+    } else if (workout.type === 'cycling') {
+      html += `
+        <div class="workout__details">
+              <span class="workout__icon">⚡️</span>
+              <span class="workout__value">${workout.speed.toFixed(1)}</span>
+              <span class="workout__unit">km/h</span>
+            </div>
+            <div class="workout__details">
+              <span class="workout__icon">⛰</span>
+              <span class="workout__value">${workout.elevationGain}</span>
+              <span class="workout__unit">m</span>
+            </div>
+          </li>
+          `;
   }
 }
 
