@@ -233,7 +233,7 @@ class App {
   //use inside new workout method
   _renderWorkout(workout) {
     //insert some dynamic markup
-    const html = `<li class="workout workout--${workout.type}" data-id="${
+    let html = `<li class="workout workout--${workout.type}" data-id="${
       workout.id
     }">
     <h2 class="workout__title">${workout.description}</h2>
@@ -279,7 +279,10 @@ class App {
             </div>
           </li>
           `;
+      form.insertAdjacentHTML('afterend', html);
+      //insert html element after end of form
+    }
   }
 }
-
-const app = new App(); //no parameters needed
+const app = new App();
+//no parameters needed
