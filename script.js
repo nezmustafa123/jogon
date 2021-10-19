@@ -1,6 +1,6 @@
 'use strict';
 
-let map, mapEvent; //declare global variable for map
+let map, mapEvent; //declare global variable for map and mapEvent
 
 class Workout {
   //take in data common to both workouts
@@ -14,7 +14,7 @@ class Workout {
     this.duration = duration; //min
   }
   _setDescription() {
-    //add set descti
+    //add set description method to workout class so ALL types of workout classes get them
     //set workout description based of type and date
     //prettier-ignore
     //convert type to uppercase
@@ -32,7 +32,7 @@ class Running extends Workout {
     super(coords, distance, duration);
     this.cadence = cadence;
     this.calcPace();
-    this._setDescription();
+    this._setDescription(); //set description specific to running
   }
 
   //calculate pace only unique to running
@@ -49,7 +49,7 @@ class Cycling extends Workout {
     super(coords, distance, duration);
     this.elevationGain = elevationGain;
     this.calcSpeed();
-    this._setDescription(); //constructor gets access to all methods of the parent class it's executed here but gets accesss to tohe type
+    this._setDescription(); //constructor gets access to all methods of the parent class it's executed here but gets accesss to the type from child class
   }
   //calculate speed only unique to cycling
   calcSpeed() {
@@ -82,6 +82,7 @@ class App {
 
   //implement app class and methods put functionality in methods which will be called constructor method gets called straight away
   constructor() {
+    //code in constructor method gets executed straight away
     //load page event triggers constructor triggers getposition
     this._getPosition();
     //render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
@@ -139,6 +140,19 @@ class App {
     inputDistance.focus();
   }
 
+  _hideForm() {
+    //empty inputs
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+        '';
+    form.style.display = 'none'; //hide form immediately to get rid of transition
+
+    form.classList.add('hidden');
+    setTimeout(() => (form.style.display = 'grid'), 1000);
+  }
+
   _toggleElevationField() {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
@@ -194,7 +208,7 @@ class App {
     //add new object to workout array
 
     this.#workouts.push(workout); //push the new workout created with running constructor function/class
-    console.log(workout);
+    // console.log(workout);
 
     //add new object to workout array
 
@@ -207,11 +221,7 @@ class App {
     this._renderWorkout(workout);
     //hide form and clear input fields
 
-    inputDistance.value =
-      inputDuration.value =
-      inputCadence.value =
-      inputElevation.value =
-        '';
+    this._hideForm();
   }
 
   _renderWorkoutMarker(workout) {
@@ -227,12 +237,15 @@ class App {
           className: `${workout.type}-popup`,
         })
       )
-      .setPopupContent('workout')
+      .setPopupContent(
+        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
+      )
       .openPopup();
   }
   //use inside new workout method
   _renderWorkout(workout) {
     //insert some dynamic markup
+    // console.log('fired');
     let html = `<li class="workout workout--${workout.type}" data-id="${
       workout.id
     }">
@@ -279,9 +292,9 @@ class App {
             </div>
           </li>
           `;
-      form.insertAdjacentHTML('afterend', html);
-      //insert html element after end of form
     }
+    form.insertAdjacentHTML('afterend', html);
+    //insert html element after end of form so last workout appears before others
   }
 }
 const app = new App();
