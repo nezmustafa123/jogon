@@ -21,7 +21,7 @@ class Workout {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
       months[this.date.getMonth()]
-    } ${this.date.getDate()}`; //use number from get month to retrieve month string from array
+    } the ${this.date.getDate()}`; //use number from get month to retrieve month string from array
   } //get date from tehe workout object then month from that which is zero based array
 }
 //child classes
@@ -92,6 +92,7 @@ class App {
     //architecture give project a structure when and how to store the data
     //data needing to be stored comes from user input
     //design classes by having parent class that has distance duration coords properties common to child classes
+    containerWorkouts.addEventListener('click', this._moveToPopup).bind(this);
   }
 
   _getPosition() {
@@ -295,6 +296,18 @@ class App {
     }
     form.insertAdjacentHTML('afterend', html);
     //insert html element after end of form so last workout appears before others
+  }
+
+  _moveToPopup(e) {
+    //get target find closest parent with workout class will get entire list elementuse the custom data-id attribute to find which popup to scroll to
+    const workoutEl = e.target.closest('.workout');
+    console.log(workoutEl);
+
+    if (!workoutEl) return; //if null return
+
+    const workout = this.#workouts.find(
+      work => work.id === workoutEl.dataset.id
+    ); //sind workout with its it equal to id of workout element clicked on
   }
 }
 const app = new App();
