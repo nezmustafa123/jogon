@@ -24,11 +24,12 @@ class Workout {
       months[this.date.getMonth()]
     } the ${this.date.getDate()}`; //use number from get month to retrieve month string from array
   } //get date from tehe workout object then month from that which is zero based array
+  click() {
+    //every object gets this method can increase the number of clicks
+    this.clicks++;
+  }
 }
 
-click() {//every object gets this method can increase the number of clicks
-  this.click ++;
-}
 //child classes
 class Running extends Workout {
   type = 'running';
@@ -64,9 +65,9 @@ class Cycling extends Workout {
   }
 }
 //create new classes as test
-// const run1 = new Running([23, -23], 5.2, 45, 190);
-// const cycle1 = new Cycling([23, -23], 27, 96, 525);
-// console.log(run1, cycle1);
+const run1 = new Running([23, -23], 5.2, 45, 190);
+const cycle1 = new Cycling([23, -23], 27, 96, 525);
+console.log(run1, cycle1);
 ///////////////////////////////
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
