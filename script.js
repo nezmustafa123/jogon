@@ -7,6 +7,7 @@ class Workout {
   //instance properties available on the new objects created through child classes
   date = new Date(); //create new date in which workout happened
   id = (Date.now() + '').slice(-10);
+  clicks = 0;
   constructor(coords, distance, duration) {
     //can call any code in constructor
     this.coords = coords; //[lat, lng] takes in array of lat and lng
@@ -23,6 +24,10 @@ class Workout {
       months[this.date.getMonth()]
     } the ${this.date.getDate()}`; //use number from get month to retrieve month string from array
   } //get date from tehe workout object then month from that which is zero based array
+}
+
+click() {//every object gets this method can increase the number of clicks
+  this.click ++;
 }
 //child classes
 class Running extends Workout {
@@ -74,9 +79,10 @@ const inputElevation = document.querySelector('.form__input--elevation');
 //APPLICATIION ARCHITECTURE
 //one big class APP everything relating to application should be in the class
 class App {
-  //private class fields
+  //private class fields/properties
 
   #map;
+  #mapZoomLevel = 13; //create zoom level field (object property)
   #mapEvent;
   #workouts = []; //initialise field to empty array
 
@@ -92,7 +98,7 @@ class App {
     //architecture give project a structure when and how to store the data
     //data needing to be stored comes from user input
     //design classes by having parent class that has distance duration coords properties common to child classes
-    containerWorkouts.addEventListener('click', this._moveToPopup).bind(this);
+    containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
 
   _getPosition() {
@@ -122,7 +128,7 @@ class App {
     const coords = [latitude, longitude];
     // console.log(this);
     //add event handler to map to listen for clicks use event handler coming from library
-    this.#map = L.map('map').setView(coords, 14); //reassign map
+    this.#map = L.map('map').setView(coords, this.#mapZoomLevel); //reassign map
     // console.log(map);
     //l variable global variable that's available in other scripts only works if scrpts file comes after
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -308,6 +314,17 @@ class App {
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     ); //sind workout with its it equal to id of workout element clicked on
+    console.log(workout);
+
+    this.#map.setView(workout.coords, this.#mapZoomLevel, {
+      //leaflet map setview takes coordinates zoom level and object of options
+      animate: true,
+      pan: {
+        duration: 2, //2 seconds
+      },
+    });
+    //using api publick interface
+    workout.click();
   }
 }
 const app = new App();
