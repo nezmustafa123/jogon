@@ -65,9 +65,9 @@ class Cycling extends Workout {
   }
 }
 //create new classes as test
-const run1 = new Running([23, -23], 5.2, 45, 190);
-const cycle1 = new Cycling([23, -23], 27, 96, 525);
-console.log(run1, cycle1);
+// const run1 = new Running([23, -23], 5.2, 45, 190);
+// const cycle1 = new Cycling([23, -23], 27, 96, 525);
+// console.log(run1, cycle1);
 ///////////////////////////////
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
@@ -195,7 +195,6 @@ class App {
     if (type === 'running') {
       const cadence = +inputCadence.value;
       //check if data is valid (number)
-      console.log(cadence);
       if (
         //check for opposide of what were interested in using guard clause
         //use isfinite to cheeck if it's not a number when one of these three is not a number and not all
@@ -318,14 +317,12 @@ class App {
   _moveToPopup(e) {
     //get target find closest parent with workout class will get entire list elementuse the custom data-id attribute to find which popup to scroll to
     const workoutEl = e.target.closest('.workout');
-    console.log(workoutEl);
 
     if (!workoutEl) return; //if null return
 
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
-    ); //sind workout with its it equal to id of workout element clicked on
-    console.log(workout);
+    ); //find workout with its it equal to id of workout element clicked on
 
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       //leaflet map setview takes coordinates zoom level and object of options
@@ -344,7 +341,6 @@ class App {
   _getLocalStorage() {
     //have to pass in the key to get item can technically set everything in app in local storage one key for each
     const data = JSON.parse(localStorage.getItem('workouts')); //large string use opposite of json stringify json parse convert to array with objects
-    console.log(data);
 
     //check if there's data to begin with
 
@@ -356,6 +352,13 @@ class App {
       this._renderWorkout(workout);
     });
   }
+
+  reset() {
+    //will be available in app object app.reset();
+    //reset method to use in the console
+    localStorage.removeItem('workouts'); //remove items based off key
+    location.reload(); //reload the page programatically so it looks empty
+  }
 }
 const app = new App();
-//no parameters needed
+//no parameters needed creat app object then store it in app
