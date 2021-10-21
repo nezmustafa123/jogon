@@ -92,6 +92,8 @@ class App {
     //code in constructor method gets executed straight away
     //load page event triggers constructor triggers getposition
     this._getPosition();
+    //get data from local storage
+    this._getLocalStorage();
     //render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
     form.addEventListener('submit', this._newWorkout.bind(this));
     //change event listener available on select element
@@ -140,6 +142,12 @@ class App {
     //map object generated leaflet with on method
     //handing clicks on map
     this.#map.on('click', this._showForm.bind(this)); //bind this keyword so this in function is app object, otherwise set map event on map
+
+    this.#workouts.forEach(workout => {
+      //loop over workouts in the list and render them on the side bar
+
+      this._renderWorkoutMarker(workout); //map hasn't been loaded yet at the beginning it takes some time, this runs in the constructor when app is first loaded
+    });
   }
 
   _showForm(mapE) {
@@ -218,18 +226,20 @@ class App {
     this.#workouts.push(workout); //push the new workout created with running constructor function/class
     // console.log(workout);
 
-    //add new object to workout array
-
+    //DELEGATE FUNCTIONALITY IN SEPERATE METHODS
     //render workout on map as a marker
-
     this._renderWorkoutMarker(workout);
     //pass in workout object to render specific workout markers
 
     //render workout on list
     this._renderWorkout(workout);
+
     //hide form and clear input fields
 
     this._hideForm();
+
+    //set local storage to all workouts
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -324,8 +334,27 @@ class App {
         duration: 2, //2 seconds
       },
     });
-    //using api publick interface
-    workout.click();
+    //using api public interface
+    // workout.click();
+  }
+  _setLocalStorage() {
+    //give name and string associate with name, convert object to string using JSON.stringify
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+  _getLocalStorage() {
+    //have to pass in the key to get item can technically set everything in app in local storage one key for each
+    const data = JSON.parse(localStorage.getItem('workouts')); //large string use opposite of json stringify json parse convert to array with objects
+    console.log(data);
+
+    //check if there's data to begin with
+
+    if (!data) return;
+    this.#workouts = data; //if there's data restore workouts array at beginning workouts array will be empy then populated
+
+    this.#workouts.forEach(workout => {
+      //loop over workouts in the list and render them on the side bar
+      this._renderWorkout(workout);
+    });
   }
 }
 const app = new App();
