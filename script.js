@@ -134,7 +134,7 @@ class App {
     this.#map = L.map('map').setView(coords, this.#mapZoomLevel); //reassign map
     // console.log(map);
     //l variable global variable that's available in other scripts only works if scrpts file comes after
-    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
@@ -163,7 +163,7 @@ class App {
       inputCadence.value =
       inputElevation.value =
         '';
-    form.style.display = 'none'; //hide form immediately to get rid of transition
+    //form.style.display = 'none'; //hide form immediately to get rid of transition
 
     form.classList.add('hidden');
     setTimeout(() => (form.style.display = 'grid'), 1000);
