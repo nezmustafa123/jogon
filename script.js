@@ -8,6 +8,7 @@ class Workout {
   date = new Date(); //create new date in which workout happened
   id = (Date.now() + '').slice(-10);
   clicks = 0;
+
   constructor(coords, distance, duration) {
     //can call any code in constructor
     this.coords = coords; //[lat, lng] takes in array of lat and lng
@@ -97,6 +98,7 @@ class App {
     //render workout that's not yet a workout put pin or marker on map replace that with data coming from workout
     form.addEventListener('submit', this._newWorkout.bind(this));
     //change event listener available on select element
+
     inputType.addEventListener('change', this._toggleElevationField);
     //architecture give project a structure when and how to store the data
     //data needing to be stored comes from user input
@@ -166,7 +168,7 @@ class App {
     //form.style.display = 'none'; //hide form immediately to get rid of transition
 
     form.classList.add('hidden');
-    setTimeout(() => (form.style.display = 'grid'), 1000);
+    setTimeout(() => (form.style.display = 'none'), 1000);
   }
 
   _toggleElevationField() {
@@ -267,6 +269,7 @@ class App {
       workout.id
     }">
     <h2 class="workout__title">${workout.description}</h2>
+    <button class="remove_btn" id="remove_${workout.id}">X</button>
     <div class="workout__details">
       <span class="workout__icon">${
         workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
@@ -312,12 +315,24 @@ class App {
     }
     form.insertAdjacentHTML('afterend', html);
     //insert html element after end of form so last workout appears before others
+    const removebtn = document.getElementById('remove_' + workout.id);
+    const app = this;
+    removebtn.addEventListener('click', function () {
+      app._removeWorkout(workout);
+    });
+  }
+
+  _removeWorkout(workout) {
+    const index = this.#workouts.indexOf(workout);
+    this.#workouts.splice(index, 1);
+    console.log(this.#workouts);
+    workout.display = 'none';
   }
 
   _moveToPopup(e) {
     //get target find closest parent with workout class will get entire list elementuse the custom data-id attribute to find which popup to scroll to
     const workoutEl = e.target.closest('.workout');
-
+    console.log(workoutEl);
     if (!workoutEl) return; //if null return
 
     const workout = this.#workouts.find(

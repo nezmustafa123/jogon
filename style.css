@@ -99,6 +99,14 @@ a:visited {
   transition: 0.8s;
 }
 
+.remove_btn {
+  /* display: inline-block; */
+  float: right;
+  width: 1.3rem;
+  margin-left: 5rem;
+  cursor: pointer;
+}
+
 .workout:hover {
   transform: translateY(-3px);
 }
@@ -112,7 +120,8 @@ a:visited {
 .workout__title {
   font-size: 1.7rem;
   font-weight: 600;
-  grid-column: 1 / -1;
+  grid-column: 1 / -2;
+  /* width: 40rem; */
 }
 
 .workout__details {
