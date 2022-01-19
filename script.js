@@ -316,17 +316,18 @@ class App {
     form.insertAdjacentHTML('afterend', html);
     //insert html element after end of form so last workout appears before others
     const removebtn = document.getElementById('remove_' + workout.id);
-    const app = this;
-    removebtn.addEventListener('click', function () {
-      app._removeWorkout(workout);
-    });
+    removebtn.addEventListener('click', this._removeWorkout.bind(this));
   }
 
-  _removeWorkout(workout) {
+  _removeWorkout(e) {
+    const workoutEl = e.target.closest('.workout');
+    const workout = this.#workouts.find(
+      work => work.id === workoutEl.dataset.id
+    ); //find workout with its it equal to
     const index = this.#workouts.indexOf(workout);
     this.#workouts.splice(index, 1);
     console.log(this.#workouts);
-    workout.display = 'none';
+    workoutEl.remove();
   }
 
   _moveToPopup(e) {
