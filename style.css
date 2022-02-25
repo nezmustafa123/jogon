@@ -101,6 +101,7 @@ a:visited {
 
 .remove_btn {
   /* display: inline-block; */
+  color: #000000;
   float: right;
   width: 1.3rem;
   margin-left: 5rem;
