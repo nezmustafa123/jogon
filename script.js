@@ -168,7 +168,7 @@ class App {
     //form.style.display = 'none'; //hide form immediately to get rid of transition
 
     form.classList.add('hidden');
-    setTimeout(() => (form.style.display = 'none'), 1000);
+    setTimeout(() => (form.style.display = 'none'), 2000);
   }
 
   _toggleElevationField() {
